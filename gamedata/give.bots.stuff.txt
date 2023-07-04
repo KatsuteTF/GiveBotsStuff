@@ -11,7 +11,7 @@
 				"linux"		"272"
 				"mac"		"272"
 			}
-			
+
 			"EquipWearable"
 			{
 				"windows"	"438"

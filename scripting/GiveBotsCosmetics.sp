@@ -15,7 +15,7 @@ ConVar g_hCVMVMSupport;
 Handle g_hWearableEquip;
 Handle g_hTouched[MAXPLAYERS+1];
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
 	name = "Give Bots Cosmetics",
 	author = "luki1412",
@@ -24,21 +24,21 @@ public Plugin myinfo =
 	url = "https://forums.alliedmods.net/member.php?u=43109"
 }
 
-public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) 
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	if (GetEngineVersion() != Engine_TF2) 
+	if (GetEngineVersion() != Engine_TF2)
 	{
 		Format(error, err_max, "This plugin only works for Team Fortress 2.");
 		return APLRes_Failure;
 	}
-	
+
 	g_bLateLoad = late;
 	return APLRes_Success;
 }
 
-public void OnPluginStart() 
+public void OnPluginStart()
 {
-	ConVar hCVversioncvar = CreateConVar("sm_gbc_version", PLUGIN_VERSION, "Give Bots Cosmetics version cvar", FCVAR_NOTIFY|FCVAR_DONTRECORD); 
+	ConVar hCVversioncvar = CreateConVar("sm_gbc_version", PLUGIN_VERSION, "Give Bots Cosmetics version cvar", FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	g_hCVEnabled = CreateConVar("sm_gbc_enabled", "1", "Enables/disables this plugin", FCVAR_NONE, true, 0.0, true, 1.0);
 	g_hCVTimer = CreateConVar("sm_gbc_delay", "0.1", "Delay for giving cosmetics to bots", FCVAR_NONE, true, 0.1, true, 30.0);
 	g_hCVTeam = CreateConVar("sm_gbc_team", "1", "Team to give cosmetics to: 1-both, 2-red, 3-blu", FCVAR_NONE, true, 1.0, true, 3.0);
@@ -46,7 +46,7 @@ public void OnPluginStart()
 
 	OnEnabledChanged(g_hCVEnabled, "", "");
 	HookConVarChange(g_hCVEnabled, OnEnabledChanged);
-	
+
 	SetConVarString(hCVversioncvar, PLUGIN_VERSION);
 	AutoExecConfig(true, "Give_Bots_Cosmetics");
 
@@ -54,19 +54,19 @@ public void OnPluginStart()
 	{
 		OnMapStart();
 	}
-	
+
 	GameData hGameConfig = LoadGameConfigFile("give.bots.stuff");
-	
+
 	if (!hGameConfig)
 	{
 		SetFailState("Failed to find give.bots.stuff.txt gamedata! Can't continue.");
-	}	
-	
+	}
+
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetFromConf(hGameConfig, SDKConf_Virtual, "EquipWearable");
 	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
 	g_hWearableEquip = EndPrepSDKCall();
-	
+
 	if (!g_hWearableEquip)
 	{
 		SetFailState("Failed to prepare the SDKCall for giving cosmetics. Try updating gamedata or restarting your server.");
@@ -100,7 +100,7 @@ public void OnClientDisconnect(int client)
 	delete g_hTouched[client];
 }
 
-public void player_inv(Handle event, const char[] name, bool dontBroadcast) 
+public void player_inv(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarInt(g_hCVEnabled))
 	{
@@ -116,7 +116,7 @@ public void player_inv(Handle event, const char[] name, bool dontBroadcast)
 		int team = GetClientTeam(client);
 		int team2 = GetConVarInt(g_hCVTeam);
 		float timer = GetConVarFloat(g_hCVTimer);
-		
+
 		switch (team2)
 		{
 			case 1:
@@ -145,7 +145,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 {
 	int client = GetClientOfUserId(data);
 	g_hTouched[client] = null;
-	
+
 	if (!GetConVarInt(g_hCVEnabled) || !IsPlayerHere(client))
 	{
 		return Plugin_Stop;
@@ -153,7 +153,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 
 	int team = GetClientTeam(client);
 	int team2 = GetConVarInt(g_hCVTeam);
-	
+
 	switch (team2)
 	{
 		case 2:
@@ -171,11 +171,11 @@ public Action Timer_GiveHat(Handle timer, any data)
 			}
 		}
 	}
-	
+
 	if (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport)))
 	{
 		bool face = false;
-	
+
 		int rnd = GetRandomUInt(0,45);
 		switch (rnd)
 		{
@@ -202,7 +202,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 			case 6:
 			{
 				CreateHat(client, 538, 6); //Killer Exclusive
-			}	
+			}
 			case 7:
 			{
 				CreateHat(client, 139, 6); //Modest Pile of Hat
@@ -214,7 +214,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 			case 9:
 			{
 				CreateHat(client, 135, 6); //Towering Pillar of Hats
-			}	
+			}
 			case 10:
 			{
 				CreateHat(client, 30119, 6); //The Federal Casemaker
@@ -262,7 +262,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 			case 21:
 			{
 				CreateHat(client, 30066, 6); //The Brotherhood of Arms
-			}	
+			}
 			case 22:
 			{
 				CreateHat(client, 30067, 6); //The Well-Rounded Rifleman
@@ -364,7 +364,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 				CreateHat(client, 30473, 6); //MK 50
 			}
 		}
-		
+
 		if (!face)
 		{
 			int rnd2 = GetRandomUInt(0,10);
@@ -409,10 +409,10 @@ public Action Timer_GiveHat(Handle timer, any data)
 				case 10:
 				{
 					CreateHat(client, 30397, 6); //The Bruiser's Bandanna
-				}				
+				}
 			}
 		}
-		
+
 		int rnd3 = GetRandomUInt(0,25);
 		switch (rnd3)
 		{
@@ -525,13 +525,13 @@ public Action Timer_GiveHat(Handle timer, any data)
 bool CreateHat(int client, int itemindex, int quality = 6, int level = 0)
 {
 	int hat = CreateEntityByName("tf_wearable");
-	
+
 	if (!IsValidEntity(hat))
 	{
 		LogError("Failed to create a valid entity with class name [tf_wearable]! Skipping.");
 		return false;
 	}
-	
+
 	char entclass[64];
 	GetEntityNetClass(hat, entclass, sizeof(entclass));
 	SetEntData(hat, FindSendPropInfo(entclass, "m_iItemDefinitionIndex"), itemindex);
@@ -545,10 +545,10 @@ bool CreateHat(int client, int itemindex, int quality = 6, int level = 0)
 	{
 		SetEntData(hat, FindSendPropInfo(entclass, "m_iEntityLevel"), GetRandomUInt(1,100));
 	}
-	
+
 	SetEntData(hat, FindSendPropInfo(entclass, "m_bInitialized"), 1);
 
-	if (!DispatchSpawn(hat)) 
+	if (!DispatchSpawn(hat))
 	{
 		LogError("The created cosmetic entity [Class name: tf_wearable, Item index: %i, Index: %i], failed to spawn! Skipping.", itemindex, hat);
 		AcceptEntityInput(hat, "Kill");
@@ -557,7 +557,7 @@ bool CreateHat(int client, int itemindex, int quality = 6, int level = 0)
 
 	SDKCall(g_hWearableEquip, client, hat);
 	return true;
-} 
+}
 
 bool IsPlayerHere(int client)
 {

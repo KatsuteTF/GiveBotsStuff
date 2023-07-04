@@ -19,7 +19,7 @@ Handle g_hWeaponEquip;
 Handle g_hWWeaponEquip;
 Handle g_hTouched[MAXPLAYERS+1];
 
-public Plugin myinfo = 
+public Plugin myinfo =
 {
 	name = "Give Bots Weapons",
 	author = "luki1412",
@@ -28,9 +28,9 @@ public Plugin myinfo =
 	url = "https://forums.alliedmods.net/member.php?u=43109"
 }
 
-public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max) 
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
 {
-	if (GetEngineVersion() != Engine_TF2) 
+	if (GetEngineVersion() != Engine_TF2)
 	{
 		Format(error, err_max, "This plugin only works for Team Fortress 2.");
 		return APLRes_Failure;
@@ -40,9 +40,9 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 	return APLRes_Success;
 }
 
-public void OnPluginStart() 
+public void OnPluginStart()
 {
-	ConVar hCVversioncvar = CreateConVar("sm_gbw_version", PLUGIN_VERSION, "Give Bots Weapons version cvar", FCVAR_NOTIFY|FCVAR_DONTRECORD); 
+	ConVar hCVversioncvar = CreateConVar("sm_gbw_version", PLUGIN_VERSION, "Give Bots Weapons version cvar", FCVAR_NOTIFY|FCVAR_DONTRECORD);
 	g_hCVEnabled = CreateConVar("sm_gbw_enabled", "1", "Enables/disables this plugin", FCVAR_NONE, true, 0.0, true, 1.0);
 	g_hCVTimer = CreateConVar("sm_gbw_delay", "0.1", "Delay for giving weapons to bots", FCVAR_NONE, true, 0.1, true, 30.0);
 	g_hCVTeam = CreateConVar("sm_gbw_team", "1", "Team to give weapons to: 1-both, 2-red, 3-blu", FCVAR_NONE, true, 1.0, true, 3.0);
@@ -58,29 +58,29 @@ public void OnPluginStart()
 	{
 		OnMapStart();
 	}
-	
+
 	GameData hGameConfig = LoadGameConfigFile("give.bots.stuff");
-	
+
 	if (!hGameConfig)
 	{
 		SetFailState("Failed to find give.bots.stuff.txt gamedata! Can't continue.");
-	}	
-	
+	}
+
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetFromConf(hGameConfig, SDKConf_Virtual, "WeaponEquip");
 	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
 	g_hWeaponEquip = EndPrepSDKCall();
-	
+
 	if (!g_hWeaponEquip)
 	{
 		SetFailState("Failed to prepare the SDKCall for giving weapons. Try updating gamedata or restarting your server.");
 	}
-	
+
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetFromConf(hGameConfig, SDKConf_Virtual, "EquipWearable");
 	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
 	g_hWWeaponEquip = EndPrepSDKCall();
-	
+
 	if (!g_hWWeaponEquip)
 	{
 		SetFailState("Failed to prepare the SDKCall for giving weapons. Try updating gamedata or restarting your server.");
@@ -122,7 +122,7 @@ public void OnClientDisconnect(int client)
 	delete g_hTouched[client];
 }
 
-public void player_hurt(Handle event, const char[] name, bool dontBroadcast) 
+public void player_hurt(Handle event, const char[] name, bool dontBroadcast)
 {
 	if (!GetConVarBool(g_hCVEnabled))
 	{
@@ -150,29 +150,29 @@ public void player_hurt(Handle event, const char[] name, bool dontBroadcast)
 			wepIndex3 = GetEntProp(wep3, Prop_Send, "m_iItemDefinitionIndex");
 		}
 
-		switch (wepIndex) 
+		switch (wepIndex)
 		{
 			case 594:
 			{
-				if (GetEntPropFloat(victim, Prop_Send, "m_flRageMeter") > 99.9 && wep == actwep) 
+				if (GetEntPropFloat(victim, Prop_Send, "m_flRageMeter") > 99.9 && wep == actwep)
 				{
 					FakeClientCommand(victim, "taunt");
 				}
 			}
 		}
 
-		switch (wepIndex3) 
+		switch (wepIndex3)
 		{
 			case 589:
 			{
-				if (GetClientHealth(victim) < 60 && wep3 == actwep) 
+				if (GetClientHealth(victim) < 60 && wep3 == actwep)
 				{
 					FakeClientCommand(victim, "eureka_teleport 0");
 				}
 			}
 		}
 	}
-	
+
 	return;
 }
 
@@ -182,7 +182,7 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 	{
 		return Plugin_Continue;
 	}
-	
+
 	if (IsPlayerHere(victim) && IsPlayerAlive(victim))
 	{
 		if (buttons&IN_RELOAD)
@@ -201,7 +201,7 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				buttons ^= IN_RELOAD;
 				if (GetEntProp(wepa, Prop_Data, "m_iClip1") < 4) {
 					buttons |= IN_ATTACK;
-				}				
+				}
 				return Plugin_Changed;
 			}
 		}
@@ -225,11 +225,11 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				wepIndex2 = GetEntProp(wep2, Prop_Send, "m_iItemDefinitionIndex");
 			}
 
-			switch (wepIndex) 
+			switch (wepIndex)
 			{
 				case 448:
 				{
-					if (GetEntPropFloat(victim, Prop_Send, "m_flHypeMeter") > 99.9 && wep == actwep) 
+					if (GetEntPropFloat(victim, Prop_Send, "m_flHypeMeter") > 99.9 && wep == actwep)
 					{
 						buttons ^= IN_ATTACK;
 						buttons |= IN_ATTACK2;
@@ -239,7 +239,7 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				case 752:
 				{
 
-					if (GetEntPropFloat(victim, Prop_Send, "m_flRageMeter") > 99.9 && wep == actwep) 
+					if (GetEntPropFloat(victim, Prop_Send, "m_flRageMeter") > 99.9 && wep == actwep)
 					{
 						buttons ^= IN_ATTACK;
 						buttons |= IN_RELOAD;
@@ -248,7 +248,7 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				}
 				case 441:
 				{
-					if (GetEntPropFloat(wep, Prop_Send, "m_flEnergy") > 19.9 && wep == actwep && GetRandomUInt(1,2) == 1) 
+					if (GetEntPropFloat(wep, Prop_Send, "m_flEnergy") > 19.9 && wep == actwep && GetRandomUInt(1,2) == 1)
 					{
 						buttons ^= IN_ATTACK;
 						buttons |= IN_ATTACK2;
@@ -258,7 +258,7 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				case 996:
 				{
 					g_iAttackPressed[victim]++;
-					if (wep == actwep && g_iAttackPressed[victim] > 1) 
+					if (wep == actwep && g_iAttackPressed[victim] > 1)
 					{
 						buttons ^= IN_ATTACK;
 						g_iAttackPressed[victim] = 0;
@@ -267,19 +267,19 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				}
 				case 730:
 				{
-					if (wep == actwep && GetEntProp(wep, Prop_Data, "m_iClip1") > 0) 
+					if (wep == actwep && GetEntProp(wep, Prop_Data, "m_iClip1") > 0)
 					{
 						buttons ^= IN_ATTACK;
 						return Plugin_Changed;
-					}					
+					}
 				}
 			}
 
-			switch (wepIndex2) 
+			switch (wepIndex2)
 			{
 				case 751:
 				{
-					if (wep2 == actwep && GetRandomUInt(1,3) == 1) 
+					if (wep2 == actwep && GetRandomUInt(1,3) == 1)
 					{
 						buttons |= IN_ATTACK2;
 						return Plugin_Changed;
@@ -287,21 +287,21 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 				}
 				case 528:
 				{
-					if (wep2 == actwep && GetRandomUInt(1,3) == 1) 
+					if (wep2 == actwep && GetRandomUInt(1,3) == 1)
 					{
 						buttons ^= IN_ATTACK;
 						buttons |= IN_ATTACK2;
 						return Plugin_Changed;
-					}	
+					}
 				}
 			}
 		}
 	}
-	
+
 	return Plugin_Continue;
 }
 
-public void player_inv(Handle event, const char[] ename, bool dontBroadcast) 
+public void player_inv(Handle event, const char[] ename, bool dontBroadcast)
 {
 	if (!GetConVarBool(g_hCVEnabled))
 	{
@@ -345,7 +345,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 {
 	int client = GetClientOfUserId(data);
 	g_hTouched[client] = null;
-	
+
 	if (!GetConVarBool(g_hCVEnabled) || !IsPlayerHere(client))
 	{
 		return Plugin_Stop;
@@ -353,7 +353,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 
 	int team = GetClientTeam(client);
 	int team2 = GetConVarInt(g_hCVTeam);
-	
+
 	switch (team2)
 	{
 		case 2:
@@ -425,8 +425,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_scattergun", 0, 1103);
 						}
 					}
-					
-					int rnd2 = GetRandomUInt(0,2);
+
+					int rnd2 = GetRandomUInt(0,6);
 
 					switch (rnd2)
 					{
@@ -438,9 +438,26 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_handgun_scout_secondary", 1, 449, 15);
 						}
+						// added
+						case 3:
+						{
+							CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 46, 5);
+						}
+						case 4:
+						{
+							CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 163, 5);
+						}
+						case 5:
+						{
+							CreateWeapon(client, "tf_weapon_jar_milk", 1, 222, 5);
+						}
+						case 6:
+						{
+							CreateWeapon(client, "tf_weapon_cleaver", 1, 812, 100);
+						}
 					}
-					
-					int rnd3 = GetRandomUInt(0,13);
+
+					int rnd3 = GetRandomUInt(0,14);
 
 					switch (rnd3)
 					{
@@ -496,6 +513,11 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_bat", 2, 1123, 50);
 						}
+						// added
+						case 14:
+						{
+							CreateWeapon(client, "tf_weapon_bat", 2, 325, 25);
+						}
 					}
 				}
 				case TFClass_Sniper:
@@ -537,8 +559,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_sniperrifle", 0, 851, 1);
 						}
 					}
-					
-					int rnd2 = GetRandomUInt(0,1);
+
+					int rnd2 = GetRandomUInt(0,5);
 
 					switch (rnd2)
 					{
@@ -546,8 +568,25 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_charged_smg", 1, 751, 1);
 						}
+						// added
+						case 2:
+						{
+							CreateWeapon(client, "tf_wearable_razorback", 1, 57, 10, true);
+						}
+						case 3:
+						{
+							CreateWeapon(client, "tf_weapon_jar", 1, 58, 5);
+						}
+						case 4:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 231, 10, true);
+						}
+						case 5:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 642, 10, true);
+						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,8);
 
 					switch (rnd3)
@@ -584,7 +623,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_club", 2, 1123, 50);
 						}
-					}			
+					}
 				}
 				case TFClass_Soldier:
 				{
@@ -621,8 +660,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_rocketlauncher", 0, 730);
 						}
 					}
-					
-					int rnd2 = GetRandomUInt(0,3);
+
+					int rnd2 = GetRandomUInt(0,8);
 
 					switch (rnd2)
 					{
@@ -638,9 +677,30 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_shotgun_soldier", 1, 415, 10);
 						}
+						// added
+						case 4:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 129, 5);
+						}
+						case 5:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 133, 10, true);
+						}
+						case 6:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 226, 10);
+						}
+						case 7:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 354, 5);
+						}
+						case 8:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 444, 10, true);
+						}
 					}
-					
-					int rnd3 = GetRandomUInt(0,10);
+
+					int rnd3 = GetRandomUInt(0,11);
 
 					switch (rnd3)
 					{
@@ -684,11 +744,16 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_shovel", 2, 1123, 50);
 						}
+						// added
+						case 11:
+						{
+							CreateWeapon(client, "tf_weapon_shovel", 2, 416, 10);
+						}
 					}
 				}
 				case TFClass_DemoMan:
 				{
-					int rnd = GetRandomUInt(0,2);
+					int rnd = GetRandomUInt(0,5);
 
 					switch (rnd)
 					{
@@ -700,8 +765,21 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_cannon", 0, 996, 10);
 						}
+						// added
+						case 3:
+						{
+							CreateWeapon(client, "tf_weapon_grenadelauncher", 0, 308, 10);
+						}
+						case 4:
+						{
+							CreateWeapon(client, "tf_wearable", 0, 405, 10, true);
+						}
+						case 5:
+						{
+							CreateWeapon(client, "tf_wearable", 0, 608, 10, true);
+						}
 					}
-					
+
 					int rnd2 = GetRandomUInt(0,1);
 
 					switch (rnd2)
@@ -711,7 +789,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_pipebomblauncher", 1, 1150);
 						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,13);
 
 					switch (rnd3)
@@ -768,7 +846,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_bottle", 2, 1123, 50);
 						}
-					}				
+					}
 				}
 				case TFClass_Medic:
 				{
@@ -789,7 +867,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_syringegun_medic", 0, 412, 5);
 						}
 					}
-					
+
 					int rnd2 = GetRandomUInt(0,3);
 
 					switch (rnd2)
@@ -807,7 +885,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_medigun", 1, 998, 8);
 						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,9);
 
 					switch (rnd3)
@@ -848,7 +926,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_bonesaw", 2, 1123, 50);
 						}
-					}			
+					}
 				}
 				case TFClass_Heavy:
 				{
@@ -873,7 +951,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_minigun", 0, 811);
 						}
 					}
-					
+
 					int rnd2 = GetRandomUInt(0,2);
 
 					switch (rnd2)
@@ -885,9 +963,9 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						case 2:
 						{
 							CreateWeapon(client, "tf_weapon_shotgun_hwg", 1, 1153);
-						}						
+						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,12);
 
 					switch (rnd3)
@@ -940,7 +1018,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1123, 50);
 						}
-					}						
+					}
 				}
 				case TFClass_Pyro:
 				{
@@ -973,8 +1051,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_flamethrower", 0, 30474, 25);
 						}
 					}
-					
-					int rnd2 = GetRandomUInt(0,6);
+
+					int rnd2 = GetRandomUInt(0,7);
 
 					switch (rnd2)
 					{
@@ -1002,8 +1080,13 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_shotgun_pyro", 1, 415, 10);
 						}
+						// added
+						case 7:
+						{
+							CreateWeapon(client, "tf_weapon_jar_gas", 1, 1180, 100);
+						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,16);
 
 					switch (rnd3)
@@ -1072,7 +1155,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1123, 50);
 						}
-					}			
+					}
 				}
 				case TFClass_Spy:
 				{
@@ -1095,9 +1178,9 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						case 4:
 						{
 							CreateWeapon(client, "tf_weapon_revolver", 0, 525, 5);
-						}					
+						}
 					}
-					
+
 					int rnd2 = GetRandomUInt(0,1);
 
 					switch (rnd2)
@@ -1107,7 +1190,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_sapper", 1, 810);
 						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,6);
 
 					switch (rnd3)
@@ -1145,7 +1228,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_invis", 4, 947);
 						}
-					}					
+					}
 				}
 				case TFClass_Engineer:
 				{
@@ -1172,14 +1255,14 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						case 5:
 						{
 							CreateWeapon(client, "tf_weapon_shotgun_primary", 0, 527, 5);
-						}					
+						}
 					}
-					
-					int rnd2 = GetRandomUInt(0,1);
+
+					int rnd2 = GetRandomUInt(0,3);
 
 					switch (rnd2)
 					{
-						case 1:
+						case 1: // 1/4 chance
 						{
 							CreateWeapon(client, "tf_weapon_mechanical_arm", 1, 528, 5);
 						}
@@ -1209,7 +1292,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_wrench", 2, 589, 20);
 						}
-					}	
+					}
 				}
 			}
 		}
@@ -1219,7 +1302,33 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 			{
 				case TFClass_Scout:
 				{
-					int rnd3 = GetRandomUInt(0,13);
+					int rnd2 = GetRandomUInt(0,4);
+					if(rnd2 != 0)
+					{
+						TF2_RemoveWeaponSlot(client, 1);
+					}
+					switch (rnd2)
+					{
+						// added
+						case 1:
+						{
+							CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 46, 5);
+						}
+						case 2:
+						{
+							CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 163, 5);
+						}
+						case 3:
+						{
+							CreateWeapon(client, "tf_weapon_jar_milk", 1, 222, 5);
+						}
+						case 4:
+						{
+							CreateWeapon(client, "tf_weapon_cleaver", 1, 812, 100);
+						}
+					}
+
+					int rnd3 = GetRandomUInt(0,14);
 
 					switch (rnd3)
 					{
@@ -1275,11 +1384,16 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_bat", 2, 1123, 50);
 						}
+						// added
+						case 14:
+						{
+							CreateWeapon(client, "tf_weapon_bat", 2, 325, 25);
+						}
 					}
 				}
 				case TFClass_Sniper:
 				{
-					int rnd2 = GetRandomUInt(0,3);
+					int rnd2 = GetRandomUInt(0,4);
 
 					switch (rnd2)
 					{
@@ -1295,8 +1409,13 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_wearable", 1, 642, 10, true);
 						}
+						// added
+						case 4:
+						{
+							CreateWeapon(client, "tf_weapon_jar", 1, 58, 5);
+						}
 					}
-					
+
 					int rnd3 = GetRandomUInt(0,8);
 
 					switch (rnd3)
@@ -1333,11 +1452,11 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_club", 2, 1123, 50);
 						}
-					}			
+					}
 				}
 				case TFClass_Soldier:
 				{
-					int rnd2 = GetRandomUInt(0,2);
+					int rnd2 = GetRandomUInt(0,7);
 
 					switch (rnd2)
 					{
@@ -1349,9 +1468,30 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_wearable", 1, 444, 10, true);
 						}
+						// added
+						case 3:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 129, 5);
+						}
+						case 4:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 133, 10, true);
+						}
+						case 5:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 226, 10);
+						}
+						case 6:
+						{
+							CreateWeapon(client, "tf_weapon_buff_item", 1, 354, 5);
+						}
+						case 7:
+						{
+							CreateWeapon(client, "tf_wearable", 1, 444, 10, true);
+						}
 					}
-					
-					int rnd3 = GetRandomUInt(0,10);
+
+					int rnd3 = GetRandomUInt(0,11);
 
 					switch (rnd3)
 					{
@@ -1395,6 +1535,11 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_shovel", 2, 1123, 50);
 						}
+						// added
+						case 11:
+						{
+							CreateWeapon(client, "tf_weapon_shovel", 2, 416, 10);
+						}
 					}
 				}
 				case TFClass_DemoMan:
@@ -1411,7 +1556,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_wearable", 0, 608, 10, true);
 						}
-					}				
+					}
 
 					int rnd2 = GetRandomUInt(0,3);
 
@@ -1429,8 +1574,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_wearable_demoshield", 1, 1099, _, true);
 						}
-					}				
-				
+					}
+
 					int rnd3 = GetRandomUInt(0,14);
 
 					switch (rnd3)
@@ -1484,8 +1629,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 							CreateWeapon(client, "tf_weapon_bottle", 2, 474, 25);
 						}
 						case 13:
-						{						
-							CreateWeapon(client, "tf_weapon_sword", 2, 404);							
+						{
+							CreateWeapon(client, "tf_weapon_sword", 2, 404);
 						}
 						case 14:
 						{
@@ -1535,7 +1680,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_bonesaw", 2, 1123, 50);
 						}
-					}	
+					}
 				}
 				case TFClass_Heavy:
 				{
@@ -1591,7 +1736,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1123, 50);
 						}
-					}				
+					}
 				}
 				case TFClass_Pyro:
 				{
@@ -1704,7 +1849,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						{
 							CreateWeapon(client, "tf_weapon_invis", 4, 947);
 						}
-					}					
+					}
 				}
 				case TFClass_Engineer:
 				{
@@ -1731,8 +1876,8 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						case 5:
 						{
 							CreateWeapon(client, "tf_weapon_wrench", 2, 1123, 50);
-						}				
-					}	
+						}
+					}
 				}
 			}
 		}
@@ -1754,16 +1899,16 @@ public void EventRoundReset(Handle event, const char[] name, bool dontBroadcast)
 bool CreateWeapon(int client, char[] classname, int slot, int itemindex, int level = 0, bool wearable = false)
 {
 	int weapon = CreateEntityByName(classname);
-	
+
 	if (!IsValidEntity(weapon))
 	{
 		LogError("Failed to create a valid entity with class name [%s]! Skipping.", classname);
 		return false;
 	}
-	
+
 	char entclass[64];
 	GetEntityNetClass(weapon, entclass, sizeof(entclass));
-	SetEntData(weapon, FindSendPropInfo(entclass, "m_iItemDefinitionIndex"), itemindex);	 
+	SetEntData(weapon, FindSendPropInfo(entclass, "m_iItemDefinitionIndex"), itemindex);
 	SetEntData(weapon, FindSendPropInfo(entclass, "m_iEntityQuality"), 6);
 
 	if (level)
@@ -1774,10 +1919,10 @@ bool CreateWeapon(int client, char[] classname, int slot, int itemindex, int lev
 	{
 		SetEntData(weapon, FindSendPropInfo(entclass, "m_iEntityLevel"), GetRandomUInt(1,99));
 	}
-	
+
 	SetEntData(weapon, FindSendPropInfo(entclass, "m_bInitialized"), 1);
 
-	if (!DispatchSpawn(weapon)) 
+	if (!DispatchSpawn(weapon))
 	{
 		LogError("The created weapon entity [Class name: %s, Item index: %i, Index: %i], failed to spawn! Skipping.", classname, itemindex, weapon);
 		AcceptEntityInput(weapon, "Kill");
@@ -1813,7 +1958,7 @@ bool CreateWeapon(int client, char[] classname, int slot, int itemindex, int lev
 		{
 			int iOffset = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType", 1)*4;
 			int iAmmoTable = FindSendPropInfo("CTFPlayer", "m_iAmmo");
-			SetEntData(client, iAmmoTable+iOffset, 16, 4);			
+			SetEntData(client, iAmmoTable+iOffset, 16, 4);
 		}
 	}
 
@@ -1821,11 +1966,11 @@ bool CreateWeapon(int client, char[] classname, int slot, int itemindex, int lev
 		TF2_RemoveWeaponSlot(client, slot);
 	}
 
-	if (!wearable) 
+	if (!wearable)
 	{
 		SDKCall(g_hWeaponEquip, client, weapon);
-	} 
-	else 
+	}
+	else
 	{
 		SDKCall(g_hWWeaponEquip, client, weapon);
 	}
@@ -1842,7 +1987,7 @@ bool CreateWeapon(int client, char[] classname, int slot, int itemindex, int lev
 public Action TimerHealth(Handle timer, any client)
 {
 	int hp = GetPlayerMaxHp(client);
-	
+
 	if (hp > 0)
 	{
 		SetEntityHealth(client, hp);

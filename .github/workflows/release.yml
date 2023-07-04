@@ -1,0 +1,20 @@
+name: Release
+on:
+  release:
+    types: [published]
+
+jobs:
+  release_gbc:
+    name: Release Plugin (GBC)
+    uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
+    with:
+      file: scripting/GiveBotsCosmetics.sp
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
+  release_gbw:
+    name: Release Plugin (GBW)
+    uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
+    with:
+      file: scripting/GiveBotsWeapons.sp
+    secrets:
+      token: ${{ secrets.GITHUB_TOKEN }}
