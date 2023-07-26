@@ -176,7 +176,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 	{
 		bool face = false;
 
-		int rnd = GetRandomUInt(0,45);
+		int rnd = GetRandomUInt(0,45 + 10);
 		switch (rnd)
 		{
 			case 1:
@@ -367,7 +367,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 
 		if (!face)
 		{
-			int rnd2 = GetRandomUInt(0,10);
+			int rnd2 = GetRandomUInt(0,10 + 2);
 			switch (rnd2)
 			{
 				case 1:
@@ -413,7 +413,7 @@ public Action Timer_GiveHat(Handle timer, any data)
 			}
 		}
 
-		int rnd3 = GetRandomUInt(0,25);
+		int rnd3 = GetRandomUInt(0,25 + 5);
 		switch (rnd3)
 		{
 			case 1:

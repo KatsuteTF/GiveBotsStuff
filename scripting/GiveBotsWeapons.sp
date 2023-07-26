@@ -378,23 +378,23 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 	{
 		TFClassType class = TF2_GetPlayerClass(client);
 
-		int rndact = GetRandomUInt(0,3);
+		// int rndact = GetRandomUInt(0,3);
 
-		switch (rndact)
-		{
-			case 1:
-			{
-				CreateWeapon(client, "tf_wearable", -1, 241, 5, true);
-			}
-			case 2:
-			{
-				CreateWeapon(client, "tf_powerup_bottle", -1, 489, _, true);
-			}
-			case 3:
-			{
-				CreateWeapon(client, "tf_weapon_spellbook", -1, 1069, 1, false);
-			}
-		}
+		// switch (rndact)
+		// {
+		// 	case 1:
+		// 	{
+		// 		CreateWeapon(client, "tf_wearable", -1, 241, 5, true);
+		// 	}
+		// 	case 2:
+		// 	{
+		// 		CreateWeapon(client, "tf_powerup_bottle", -1, 489, _, true);
+		// 	}
+		// 	case 3:
+		// 	{
+		// 		CreateWeapon(client, "tf_weapon_spellbook", -1, 1069, 1, false);
+		// 	}
+		// }
 
 		if (GameRules_GetProp("m_bPlayingMedieval") != 1)
 		{
