@@ -94,7 +94,6 @@ public void OnEnabledChanged(ConVar convar, const char[] oldValue, const char[] 
 	if (GetConVarBool(g_hCVEnabled))
 	{
 		HookEvent("post_inventory_application", player_inv);
-        HookEvent("player_changeclass", player_inv);
 		HookEvent("teamplay_round_stalemate", EventSuddenDeath, EventHookMode_PostNoCopy);
 		HookEvent("teamplay_round_start", EventRoundReset, EventHookMode_PostNoCopy);
 		HookEvent("player_hurt", player_hurt);
@@ -102,7 +101,6 @@ public void OnEnabledChanged(ConVar convar, const char[] oldValue, const char[] 
 	else
 	{
 		UnhookEvent("post_inventory_application", player_inv);
-        HookEvent("player_changeclass", player_inv);
 		UnhookEvent("teamplay_round_stalemate", EventSuddenDeath, EventHookMode_PostNoCopy);
 		UnhookEvent("teamplay_round_start", EventRoundReset, EventHookMode_PostNoCopy);
 		UnhookEvent("player_hurt", player_hurt);
@@ -314,7 +312,7 @@ public void player_inv(Handle event, const char[] ename, bool dontBroadcast)
 	int client = GetClientOfUserId(userd);
 	delete g_hTouched[client];
 
-	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport) && GetClientTeam(client) == 2)) && IsPlayerHere(client))
+	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport))) && IsPlayerHere(client))
 	{
 		int team = GetClientTeam(client);
 		int team2 = GetConVarInt(g_hCVTeam);
@@ -374,7 +372,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 		}
 	}
 
-	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport) && GetClientTeam(client) == 2)))
+	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport))))
 	{
 		TFClassType class = TF2_GetPlayerClass(client);
 
