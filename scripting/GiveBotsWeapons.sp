@@ -315,7 +315,7 @@ public void player_inv(Handle event, const char[] ename, bool dontBroadcast)
 	if(g_hTouched[client] != null)
 		delete g_hTouched[client];
 
-	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport))) && IsPlayerHere(client))
+	if (!g_bSuddenDeathMode && (!g_bMVM || (g_bMVM && GetConVarBool(g_hCVMVMSupport))) && IsClientInGame(client))
 	{
 		int team = GetClientTeam(client);
 		int team2 = GetConVarInt(g_hCVTeam);
@@ -349,7 +349,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 	int client = GetClientOfUserId(data);
 	g_hTouched[client] = null;
 
-	if (!GetConVarBool(g_hCVEnabled) || !IsPlayerHere(client))
+	if (!GetConVarBool(g_hCVEnabled) || !IsClientInGame(client))
 	{
 		return Plugin_Stop;
 	}
@@ -969,59 +969,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 						}
 					}
 
-					int rnd3 = GetRandomUInt(0,12);
-
-					switch (rnd3)
-					{
-						case 1:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 43, 7);
-						}
-						case 2:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 239, 10);
-						}
-						case 3:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 310, 10);
-						}
-						case 4:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 331, 10);
-						}
-						case 5:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 426, 10);
-						}
-						case 6:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 656, 10);
-						}
-						case 7:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 587, 10);
-						}
-						case 8:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1013, 5);
-						}
-						case 9:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 939, 5);
-						}
-						case 10:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 880, 25);
-						}
-						case 11:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 474, 25);
-						}
-						case 12:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1123, 50);
-						}
-					}
+					CreateWeapon(client, "tf_weapon_fists", 2, 656, 10);
 				}
 				case TFClass_Pyro:
 				{
@@ -1687,59 +1635,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 				}
 				case TFClass_Heavy:
 				{
-					int rnd3 = GetRandomUInt(0,12);
-
-					switch (rnd3)
-					{
-						case 1:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 43, 7);
-						}
-						case 2:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 239, 10);
-						}
-						case 3:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 310, 10);
-						}
-						case 4:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 331, 10);
-						}
-						case 5:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 426, 10);
-						}
-						case 6:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 656, 10);
-						}
-						case 7:
-						{
-							CreateWeapon(client, "tf_weapon_fists", 2, 587, 10);
-						}
-						case 8:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1013, 5);
-						}
-						case 9:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 939, 5);
-						}
-						case 10:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 880, 25);
-						}
-						case 11:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 474, 25);
-						}
-						case 12:
-						{
-							CreateWeapon(client, "tf_weapon_fireaxe", 2, 1123, 50);
-						}
-					}
+					CreateWeapon(client, "tf_weapon_fists", 2, 656, 10);
 				}
 				case TFClass_Pyro:
 				{
