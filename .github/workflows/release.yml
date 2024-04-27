@@ -9,6 +9,7 @@ jobs:
     uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
     with:
       file: scripting/GiveBotsCosmetics.sp
+      sourcepawn-version: "1.12"
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
   release_gbw:
@@ -16,5 +17,6 @@ jobs:
     uses: KatsuteTF/Workflows/.github/workflows/release.yml@main
     with:
       file: scripting/GiveBotsWeapons.sp
+      sourcepawn-version: "1.12"
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}

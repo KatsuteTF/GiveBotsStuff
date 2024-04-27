@@ -17,3 +17,4 @@ jobs:
     uses: KatsuteTF/Workflows/.github/workflows/ci.yml@main
     with:
       file: scripting/GiveBotsWeapons.sp
+      sourcepawn-version: "1.12"
