@@ -1,0 +1,20 @@
+name: SourcePawn CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, reopened, synchronize]
+
+jobs:
+  gbc_ci:
+    name: SourcePawn CI (GBC)
+    uses: KatsuteTF/Workflows/.github/workflows/ci.yml@main
+    with:
+      file: scripting/GiveBotsCosmetics.sp
+  gbw_ci:
+    name: SourcePawn CI (GBW)
+    uses: KatsuteTF/Workflows/.github/workflows/ci.yml@main
+    with:
+      file: scripting/GiveBotsWeapons.sp
+      sourcepawn-version: "1.12"
