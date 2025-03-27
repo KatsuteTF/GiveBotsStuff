@@ -466,7 +466,7 @@ public Action Timer_GiveWeapons(Handle timer, any data)
 		SelectMedievalClassWeapons(client, class);
 	}
 
-	SelectActionItem(client);
+	// SelectActionItem(client);
 	CreateTimer(0.1, TimerHealth, client, TIMER_FLAG_NO_MAPCHANGE);
 	return Plugin_Continue;
 }
