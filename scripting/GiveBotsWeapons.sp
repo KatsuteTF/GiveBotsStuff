@@ -115,7 +115,8 @@ public void OnMapStart()
 
 public void OnClientDisconnect(int client)
 {
-	delete g_hTouched[client];
+	if(g_hTouched[client] != null)
+		delete g_hTouched[client];
 }
 
 public void player_hurt(Handle event, const char[] name, bool dontBroadcast)
@@ -313,6 +314,13 @@ public Action OnPlayerRunCmd(int victim, int& buttons, int& impulse, float vel[3
 					return Plugin_Changed;
 				}
 			}
+			case 304:
+			{
+				if (GetClientHealth(victim) < 60 && wep3 == actwep)
+				{
+					FakeClientCommand(victim, "taunt");
+				}
+			}
 		}
 	}
 	else if (buttons&IN_RELOAD)
@@ -380,7 +388,9 @@ public void player_inv(Handle event, const char[] ename, bool dontBroadcast)
 
 	int userd = GetEventInt(event, "userid");
 	int client = GetClientOfUserId(userd);
-	delete g_hTouched[client];
+
+	if(g_hTouched[client] != null)
+		delete g_hTouched[client];
 
 	if (!IsPlayerHere(client))
 	{
@@ -490,7 +500,33 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 	{
 		case TFClass_Scout:
 		{
-			rnd = GetRandomUInt(0,13);
+			rnd = GetRandomUInt(0,4);
+			if(rnd != 0)
+			{
+				TF2_RemoveWeaponSlot(client, 1);
+			}
+			switch (rnd)
+			{
+				// added
+				case 1:
+				{
+					CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 46, 5);
+				}
+				case 2:
+				{
+					CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 163, 5);
+				}
+				case 3:
+				{
+					CreateWeapon(client, "tf_weapon_jar_milk", 1, 222, 5);
+				}
+				case 4:
+				{
+					CreateWeapon(client, "tf_weapon_cleaver", 1, 812, 100);
+				}
+			}
+
+			rnd = GetRandomUInt(0,14);
 
 			switch (rnd)
 			{
@@ -546,11 +582,16 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_weapon_bat", 2, 1123, 50); // Necro Smasher
 				}
+				// added
+				case 14:
+				{
+					CreateWeapon(client, "tf_weapon_bat", 2, 325, 25);
+				}
 			}
 		}
 		case TFClass_Sniper:
 		{
-			rnd = GetRandomUInt(0,3);
+			rnd = GetRandomUInt(0,4);
 
 			switch (rnd)
 			{
@@ -565,6 +606,11 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 				case 3:
 				{
 					CreateWeapon(client, "tf_wearable", 1, 642, 10, true); // Cozy Camper
+				}
+				// added
+				case 4:
+				{
+					CreateWeapon(client, "tf_weapon_jar", 1, 58, 5);
 				}
 			}
 
@@ -608,7 +654,7 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 		}
 		case TFClass_Soldier:
 		{
-			rnd = GetRandomUInt(0,2);
+			rnd = GetRandomUInt(0,7);
 
 			switch (rnd)
 			{
@@ -620,9 +666,30 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_wearable", 1, 444, 10, true); // Mantreads
 				}
+				// added
+				case 3:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 129, 5);
+				}
+				case 4:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 133, 10, true);
+				}
+				case 5:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 226, 10);
+				}
+				case 6:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 354, 5);
+				}
+				case 7:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 444, 10, true);
+				}
 			}
 
-			rnd = GetRandomUInt(0,10);
+			rnd = GetRandomUInt(0,11);
 
 			switch (rnd)
 			{
@@ -665,6 +732,11 @@ void SelectMedievalClassWeapons(int client, TFClassType class)
 				case 10:
 				{
 					CreateWeapon(client, "tf_weapon_shovel", 2, 1123, 50); // Necro Smasher
+				}
+				// added
+				case 11:
+				{
+					CreateWeapon(client, "tf_weapon_shovel", 2, 416, 10);
 				}
 			}
 		}
@@ -1043,7 +1115,7 @@ void SelectClassWeapons(int client, TFClassType class)
 				}
 			}
 
-			rnd = GetRandomUInt(0,2);
+			rnd = GetRandomUInt(0,6);
 
 			switch (rnd)
 			{
@@ -1055,9 +1127,26 @@ void SelectClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_weapon_handgun_scout_secondary", 1, 449, 15);  // Winger
 				}
+				// added
+				case 3:
+				{
+					CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 46, 5);
+				}
+				case 4:
+				{
+					CreateWeapon(client, "tf_weapon_lunchbox_drink", 1, 163, 5);
+				}
+				case 5:
+				{
+					CreateWeapon(client, "tf_weapon_jar_milk", 1, 222, 5);
+				}
+				case 6:
+				{
+					CreateWeapon(client, "tf_weapon_cleaver", 1, 812, 100);
+				}
 			}
 
-			rnd = GetRandomUInt(0,13);
+			rnd = GetRandomUInt(0,14);
 
 			switch (rnd)
 			{
@@ -1113,6 +1202,11 @@ void SelectClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_weapon_bat", 2, 1123, 50);  // Necro Smasher
 				}
+				// added
+				case 14:
+				{
+					CreateWeapon(client, "tf_weapon_bat", 2, 325, 25);
+				}
 			}
 		}
 		case TFClass_Sniper:
@@ -1155,13 +1249,30 @@ void SelectClassWeapons(int client, TFClassType class)
 				}
 			}
 
-			rnd = GetRandomUInt(0,1);
+			rnd = GetRandomUInt(0,5);
 
 			switch (rnd)
 			{
 				case 1:
 				{
 					CreateWeapon(client, "tf_weapon_charged_smg", 1, 751, 1); // Cleaner's Carabine
+				}
+				// added
+				case 2:
+				{
+					CreateWeapon(client, "tf_wearable_razorback", 1, 57, 10, true);
+				}
+				case 3:
+				{
+					CreateWeapon(client, "tf_weapon_jar", 1, 58, 5);
+				}
+				case 4:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 231, 10, true);
+				}
+				case 5:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 642, 10, true);
 				}
 			}
 
@@ -1239,7 +1350,7 @@ void SelectClassWeapons(int client, TFClassType class)
 				}
 			}
 
-			rnd = GetRandomUInt(0,3);
+			rnd = GetRandomUInt(0,8);
 
 			switch (rnd)
 			{
@@ -1255,9 +1366,30 @@ void SelectClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_weapon_shotgun_soldier", 1, 415, 10); // Reserve Shooter
 				}
+				// added
+				case 4:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 129, 5);
+				}
+				case 5:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 133, 10, true);
+				}
+				case 6:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 226, 10);
+				}
+				case 7:
+				{
+					CreateWeapon(client, "tf_weapon_buff_item", 1, 354, 5);
+				}
+				case 8:
+				{
+					CreateWeapon(client, "tf_wearable", 1, 444, 10, true);
+				}
 			}
 
-			rnd = GetRandomUInt(0,10);
+			rnd = GetRandomUInt(0,11);
 
 			switch (rnd)
 			{
@@ -1301,11 +1433,16 @@ void SelectClassWeapons(int client, TFClassType class)
 				{
 					CreateWeapon(client, "tf_weapon_shovel", 2, 1123, 50); // Necro Smasher
 				}
+				// added
+				case 11:
+				{
+					CreateWeapon(client, "tf_weapon_shovel", 2, 416, 10);
+				}
 			}
 		}
 		case TFClass_DemoMan:
 		{
-			rnd = GetRandomUInt(0,2);
+			rnd = GetRandomUInt(0,5);
 
 			switch (rnd)
 			{
@@ -1316,6 +1453,19 @@ void SelectClassWeapons(int client, TFClassType class)
 				case 2:
 				{
 					CreateWeapon(client, "tf_weapon_cannon", 0, 996, 10); // Loose Cannon
+				}
+				// added
+				case 3:
+				{
+					CreateWeapon(client, "tf_weapon_grenadelauncher", 0, 308, 10);
+				}
+				case 4:
+				{
+					CreateWeapon(client, "tf_wearable", 0, 405, 10, true);
+				}
+				case 5:
+				{
+					CreateWeapon(client, "tf_wearable", 0, 608, 10, true);
 				}
 			}
 
@@ -1591,7 +1741,7 @@ void SelectClassWeapons(int client, TFClassType class)
 				}
 			}
 
-			rnd = GetRandomUInt(0,6);
+			rnd = GetRandomUInt(0,7);
 
 			switch (rnd)
 			{
@@ -1618,6 +1768,11 @@ void SelectClassWeapons(int client, TFClassType class)
 				case 6:
 				{
 					CreateWeapon(client, "tf_weapon_shotgun_pyro", 1, 415, 10); // Reserve Shooter
+				}
+				// added
+				case 7:
+				{
+					CreateWeapon(client, "tf_weapon_jar_gas", 1, 1180, 100);
 				}
 			}
 

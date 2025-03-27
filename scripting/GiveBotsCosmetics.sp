@@ -90,7 +90,8 @@ public void OnMapStart()
 
 public void OnClientDisconnect(int client)
 {
-	delete g_hTouched[client];
+	if(g_hTouched[client] != null)
+		delete g_hTouched[client];
 }
 
 public void player_inv(Handle event, const char[] name, bool dontBroadcast)
@@ -102,7 +103,9 @@ public void player_inv(Handle event, const char[] name, bool dontBroadcast)
 
 	int userd = GetEventInt(event, "userid");
 	int client = GetClientOfUserId(userd);
-	delete g_hTouched[client];
+
+	if(g_hTouched[client] != null)
+		delete g_hTouched[client];
 
 	if (!IsPlayerHere(client))
 	{
